@@ -27,20 +27,20 @@ const rand = (min, max) => ~~(Math.random() * (max - min + 1) + min);
 
 const clovaSkillHandler = clova.Client.configureSkill()
 .onLaunchRequest(responseHelper => {
-      const wakeup =[
-          'Hello!',
-          'YahYah!',
-          'Hey! What is up?'
-      ];
-      responseHelper.setSimpleSpeech(
-          clova.SpeechBuilder.createSpeechText(wakeup[rand(0,wakeup.length-1)],'en')
-      );
+    const wakeup =[
+        'Hello!',
+        'YahYah!',
+        'Hey! What is up?'
+    ];
+    responseHelper.setSimpleSpeech(
+        clova.SpeechBuilder.createSpeechText(wakeup[rand(0,wakeup.length-1)],'en')
+    );
 })
 .onIntentRequest(async responseHelper => {
     const uh =[
         'Uh..',
         'Umm..',
-        'Let me see..'
+        'Well..'
     ];
     db.get('message', (err,reply)=>{
         MESSAGE=reply;
