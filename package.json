@@ -1,7 +1,7 @@
 {
   "name": "translation-via-lineclova",
   "version": "1.0.0",
-  "description": "Line Clova Test",
+  "description": "Clova Test",
   "main": "index.js",
   "engines": {
     "node": "8.11.1",
