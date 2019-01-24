@@ -1,0 +1,27 @@
+{
+  "name": "translation-via-lineclova",
+  "version": "1.0.0",
+  "description": "Line Clova Test",
+  "main": "index.js",
+  "engines": {
+    "node": "8.11.1",
+    "npm": "5.7.1"
+  },
+  "dependencies": {
+    "@line/bot-sdk": "^6.4.0",
+    "@line/clova-cek-sdk-nodejs": "^1.1.1",
+    "eslint": "^5.11.1",
+    "express": "^4.16.4",
+    "gulp": "^3.9.1",
+    "redis": "^2.8.0",
+    "url": "^0.11.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "eslint src/*.js --fix",
+    "gulp": "node ./node_modules/gulp/bin/gulp.js"
+  },
+  "author": "",
+  "license": ""
+}
