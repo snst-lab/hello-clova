@@ -23,13 +23,13 @@ db.on('error', err => {
  * Configure ClovaSkill
  */
 var MESSAGE;
+const rand = (min, max) => ~~(Math.random() * (max - min + 1) + min);
 
 const clovaSkillHandler = clova.Client.configureSkill()
 .onLaunchRequest(responseHelper => {
-      const rand = (min, max) => ~~(Math.random() * (max - min + 1) + min);
       const wakeup =[
           'Hello!',
-          'Yah!',
+          'YahYah!',
           'Hey! What is up?'
       ];
       responseHelper.setSimpleSpeech(
@@ -37,14 +37,19 @@ const clovaSkillHandler = clova.Client.configureSkill()
       );
 })
 .onIntentRequest(async responseHelper => {
+    const uh =[
+        'Uh..',
+        'Umm..',
+        'Let me see..'
+    ];
     db.get('message', (err,reply)=>{
         MESSAGE=reply;
-        const SpeechList = Array(7).fill().map(e=>clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/3sec.mp3'));
-        SpeechList[0] = MESSAGE==='...' ? clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/3sec.mp3') : clova.SpeechBuilder.createSpeechText(MESSAGE||'Are you crazy?','en');
-        SpeechList[2] = clova.SpeechBuilder.createSpeechText('Uh..','en');
-        SpeechList[4] = clova.SpeechBuilder.createSpeechText('Umm..','en');
-        responseHelper.setSpeechList(SpeechList);
     });
+    const SpeechList = Array(7).fill().map(e=>clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/3sec.mp3'));
+    SpeechList[0] = MESSAGE==='...' ? clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/3sec.mp3') : clova.SpeechBuilder.createSpeechText(MESSAGE||'Are you crazy?','en');
+    SpeechList[rand(1,3)] = clova.SpeechBuilder.createSpeechText(uh[rand(0,uh.length-1)],'en');
+    SpeechList[rand(4,6)] = clova.SpeechBuilder.createSpeechText(uh[rand(0,uh.length-1)],'en');
+    responseHelper.setSpeechList(SpeechList);
 })
 .onSessionEndedRequest(responseHelper => {})
 .handle();
