@@ -40,14 +40,14 @@ const clovaSkillHandler = clova.Client.configureSkill()
     const uh =[
         'Uh..',
         'Umm..',
-        'Well..'
+        'Let me see..'
     ];
     db.get('message', (err,reply)=>{
         MESSAGE=reply;
     });
     const SpeechList = Array(7).fill().map(e=>clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/3sec.mp3'));
     SpeechList[0] = MESSAGE==='...' ? clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/3sec.mp3') : clova.SpeechBuilder.createSpeechText(MESSAGE||'Are you crazy?','en');
-    SpeechList[rand(1,3)] = clova.SpeechBuilder.createSpeechText(uh[rand(0,uh.length-1)],'en');
+    SpeechList[rand(2,3)] = clova.SpeechBuilder.createSpeechText(uh[rand(0,uh.length-1)],'en');
     SpeechList[rand(4,6)] = clova.SpeechBuilder.createSpeechText(uh[rand(0,uh.length-1)],'en');
     responseHelper.setSpeechList(SpeechList);
 })
