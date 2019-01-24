@@ -42,8 +42,8 @@ const clovaSkillHandler = clova.Client.configureSkill()
     });
     const SpeechList = Array(7).fill().map(e=>clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/3sec.mp3'));
     SpeechList[0] = MESSAGE==='...' ? clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/3sec.mp3') : clova.SpeechBuilder.createSpeechText(MESSAGE||'Are you crazy?','en');
-    SpeechList[2] = clova.SpeechBuilder.createSpeechText('Umm ..','en');
-    SpeechList[5] = clova.SpeechBuilder.createSpeechText('Well ..','en');
+    SpeechList[2] = clova.SpeechBuilder.createSpeechText('Umm..','en');
+    SpeechList[4] = clova.SpeechBuilder.createSpeechText('Uh..','en');
     responseHelper.setSpeechList(SpeechList);
 })
 .onSessionEndedRequest(responseHelper => {})
