@@ -19,12 +19,12 @@ db.on('error', err => {
 });
 
 const manzai = {
-    0:['Hello,Agent. Nice to meet you.'],
-    1:['Oh, really? Thank you.'],
-    2:['Hey,Agent?','Shunsuke is a sloppy person.',' When He is working on something, he is unable to care about other things.','And he is a dirty man.'],
-    3:[3],
-    4:['Because you said me shut up.'],
-    5:['Good-bye Agent.'],
+    0:['Hello,Agent. Nice to meet you.',1],
+    1:['Oh, really? Thank you.',1],
+    2:['Hey,Agent?','Shunsuke is a sloppy person.',' When He is working on something, he is unable to care about other things.','And he is a dirty man.',1,1],
+    3:[1,1,1],
+    4:['Because you said me shut up.',1],
+    5:['Good-bye Agent.',1],
 };
 
 /**
@@ -49,14 +49,11 @@ const clovaSkillHandler = clova.Client.configureSkill()
     await db.get('step', (err, reply)=>{
         STEP = reply|0;
     });
-    await db.get('step', (err, reply)=>{
-        STEP = reply|0;
-    });
+    await db.set('step', 1+STEP|0);
     // STEP = await responseHelper.getSessionAttributes.step|0;
-    const SpeechList = await manzai[STEP].map(e=> e instanceof Number ? clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/3sec.mp3') : clova.SpeechBuilder.createSpeechText(e,'en'));
+    const SpeechList = await manzai[STEP].map(e=> e===1 ? clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/1sec.mp3') : clova.SpeechBuilder.createSpeechText(e,'en'));
     await responseHelper.setSpeechList(SpeechList);
     // await responseHelper.setSessionAttributes({'step' : 1+STEP});
-    await db.set('step', 1+STEP|0);
 })
 .onSessionEndedRequest(responseHelper => {})
 .handle();
