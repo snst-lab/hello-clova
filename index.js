@@ -23,14 +23,14 @@ db.set('step', 0);
 /**
  * Configure ClovaSkill
  */
-var STEP,NAME;
+var STEP;
+var NAME;
 const rand = (min, max) => ~~(Math.random() * (max - min + 1) + min);
 
 const clovaSkillHandler = clova.Client.configureSkill()
 .onLaunchRequest(responseHelper => {
     const wakeup =[
         'Hello!',
-        'YahYah!',
         'Hey! What is up?'
     ];
     responseHelper.setSimpleSpeech(
