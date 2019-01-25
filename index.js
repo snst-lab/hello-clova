@@ -23,8 +23,7 @@ db.set('step', 0);
 /**
  * Configure ClovaSkill
  */
-var STEP;
-var NAME;
+var STEP, NAME;
 const rand = (min, max) => ~~(Math.random() * (max - min + 1) + min);
 
 const clovaSkillHandler = clova.Client.configureSkill()
