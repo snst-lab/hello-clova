@@ -54,6 +54,7 @@ const clovaSkillHandler = clova.Client.configureSkill()
         STEP = reply|0;
     });
     await db.set('step', 1+STEP);
+    await db.get('step', (err, reply)=> console.log(reply));
     const SpeechList = await manzai[STEP].map(e=> [1,3,5].includes(e) ? clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/'+e+'sec.mp3') : clova.SpeechBuilder.createSpeechText(e.replace(/Agent/g,NAME),'en'));
     await responseHelper.setSpeechList(SpeechList);
 })
