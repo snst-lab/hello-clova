@@ -17,7 +17,6 @@ if (process.env.REDISTOGO_URL) {
 }
 db.on('connect', ()=> console.log('Redis client connected.'));
 db.on('error', err => console.log('Error: ' + err));
-db.set('step', 0);
 
 /**
  * Configure ClovaSkill
