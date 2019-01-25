@@ -45,7 +45,7 @@ const clovaSkillHandler = clova.Client.configureSkill()
         STEP = reply|0;
         db.set('step', 1+STEP);
     });
-    if(STEP>=manzai.length) await responseHelper.endSession();
+    if(STEP>=manzai.length-1) await responseHelper.endSession();
     const speechList = await manzai[STEP].map(e=> e ? clova.SpeechBuilder.createSpeechText(e.replace(/AGENT/g,NAME),'en') : clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/1sec.mp3'));
     await responseHelper.setSpeechList(speechList);
 })
