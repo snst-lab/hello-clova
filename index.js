@@ -18,11 +18,19 @@ db.on('error', err => {
     console.log('Error: ' + err);
 });
 
+const manzai = {
+    0:['Hello,Agent. Nice to meet you.'],
+    1:['Oh, really? Thank you.'],
+    2:['Hey,Agent?',3,'Shunsuke is a sloppy person.',' When He is working on something, he is unable to care about other things.',3,'And he is a dirty man.'],
+    3:[3],
+    4:['Because you said me shut up.'],
+    5:['Good-bye Agent.'],
+};
 
 /**
  * Configure ClovaSkill
  */
-var MESSAGE;
+var STEP;
 const rand = (min, max) => ~~(Math.random() * (max - min + 1) + min);
 
 const clovaSkillHandler = clova.Client.configureSkill()
@@ -37,19 +45,10 @@ const clovaSkillHandler = clova.Client.configureSkill()
     );
 })
 .onIntentRequest(async responseHelper => {
-    const uh = [
-        'Uh..',
-        'Umm..',
-        'Let me see..'
-    ];
-    await db.get('message', (err,reply)=>{
-        MESSAGE=reply;
-    });
-    const SpeechList = await Array(5).fill().map(e=>clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/3sec.mp3'));
-    SpeechList[0] = await MESSAGE==='...' ? clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/3sec.mp3') : clova.SpeechBuilder.createSpeechText(MESSAGE||'Are you crazy?','en');
-    SpeechList[rand(2,3)] = clova.SpeechBuilder.createSpeechText(uh[rand(0,uh.length-1)],'en');
-    SpeechList[rand(3,4)] = clova.SpeechBuilder.createSpeechText(uh[rand(0,uh.length-1)],'en');
+    STEP = await (responseHelper.getSessionAttributes.step|0)||0;
+    const SpeechList = await manzai[STEP].map(e=> e instanceof Number ? clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/3sec.mp3') : clova.SpeechBuilder.createSpeechText(e,'en'));
     await responseHelper.setSpeechList(SpeechList);
+    await responseHelper.setSessionAttributes({'step' : 1+STEP});
 })
 .onSessionEndedRequest(responseHelper => {})
 .handle();
