@@ -22,7 +22,7 @@ const manzai = {
     0:['Hello,Agent. Nice to meet you.',3],
     1:['Oh, really? Thank you.',3],
     2:['Hey,Agent?','Shunsuke is a sloppy person.',' When He is working on something, he is unable to care about other things.','And he is a dirty man.',5],
-    3:[5],
+    3:[1,3,3],
     4:['Because you said me shut up.',1],
     5:['Good-bye Agent.'],
 };
