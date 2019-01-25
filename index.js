@@ -3,6 +3,7 @@ const express = require('express');
 const clova = require('@line/clova-cek-sdk-nodejs');
 const linebot = require('@line/bot-sdk');
 const redis = require('redis');
+const manzai = require('./manzai.js');
 
 /**
  * Configure Redis
@@ -17,15 +18,6 @@ if (process.env.REDISTOGO_URL) {
 db.on('connect', ()=> console.log('Redis client connected.'));
 db.on('error', err => console.log('Error: ' + err));
 db.set('step', 0);
-
-const manzai = {
-    0:['Hello,Agent. Nice to meet you.',0],
-    1:['Oh, really? Thank you.',0],
-    2:['Hey,Agent?','Shunsuke is a sloppy person.',' When He is working on something, he is unable to care about other things.','And he is a dirty man.',0],
-    3:[0,0,0,0,0,0,0,0,0,0],
-    4:['Because you said me shut up.',0,0,0,0,0,0],
-    5:['Good-bye Agent.']
-};
 
 /**
  * Configure ClovaSkill
@@ -53,8 +45,8 @@ const clovaSkillHandler = clova.Client.configureSkill()
         STEP = reply|0;
         db.set('step', 1+STEP);
     });
-    if(STEP===manzai.length-1) responseHelper.endSession();
-    const SpeechList = await manzai[STEP].map(e=> e ? clova.SpeechBuilder.createSpeechText(e.replace(/Agent/g,NAME),'en') : clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/1sec.mp3'));
+    if(STEP===manzai.length-1) await responseHelper.endSession();
+    const SpeechList = await manzai[STEP].map(e=> e ? clova.SpeechBuilder.createSpeechText(e.replace(/AGENT/g,NAME),'en') : clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/1sec.mp3'));
     await responseHelper.setSpeechList(SpeechList);
 })
 .onSessionEndedRequest(responseHelper => {})
