@@ -46,12 +46,12 @@ const clovaSkillHandler = clova.Client.configureSkill()
     db.set('step', 0);
 })
 .onIntentRequest(async responseHelper => {
-    // await db.get('step', (err, reply)=>{
-    //     STEP = reply|0;
-    // });
+    await db.get('step', (err, reply)=>{
+        STEP = reply|0;
+    });
     const SpeechList = await manzai[STEP].map(e=> e instanceof Number ? clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/3sec.mp3') : clova.SpeechBuilder.createSpeechText(e,'en'));
     await responseHelper.setSpeechList(SpeechList);
-    // await db.set('step', 1+STEP|0);
+    await db.set('step', 1+STEP|0);
 })
 .onSessionEndedRequest(responseHelper => {})
 .handle();
