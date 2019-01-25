@@ -23,8 +23,8 @@ const manzai = {
     0:['Hello,Agent. Nice to meet you.',1,1,1,1,1],
     1:['Oh, really? Thank you.',1,1,1],
     2:['Hey,Agent?','Shunsuke is a sloppy person.',' When He is working on something, he is unable to care about other things.','And he is a dirty man.',1,1,1,1,1],
-    3:[1,1,1],
-    4:['Because you said me shut up.',1],
+    3:[1,1,1,1,1,1,1,1,1,1,1],
+    4:['Because you said me shut up.',1,1],
     5:['Good-bye Agent.'],
 };
 
@@ -50,11 +50,12 @@ const clovaSkillHandler = clova.Client.configureSkill()
     });
 })
 .onIntentRequest(async responseHelper => {
+    await db.get('step', (err, reply)=> console.log(reply));
     await db.get('step', (err, reply)=>{
         STEP = reply|0;
     });
+    if(STEP===manzai.length-1) responseHelper.endSession();
     await db.set('step', 1+STEP);
-    await db.get('step', (err, reply)=> console.log(reply));
     const SpeechList = await manzai[STEP].map(e=> [1,3,5].includes(e) ? clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/'+e+'sec.mp3') : clova.SpeechBuilder.createSpeechText(e.replace(/Agent/g,NAME),'en'));
     await responseHelper.setSpeechList(SpeechList);
 })
