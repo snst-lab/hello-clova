@@ -19,7 +19,6 @@ db.on('connect', ()=> console.log('Redis client connected.'));
 db.on('error', err => console.log('Error: ' + err));
 db.set('step', 0);
 
-
 /**
  * Configure ClovaSkill
  */
@@ -47,7 +46,10 @@ const clovaSkillHandler = clova.Client.configureSkill()
     });
     const speechList = await manzai[STEP].map(e=> e ? clova.SpeechBuilder.createSpeechText(e.replace(/AGENT/g,NAME||''),'en') : clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/1sec.mp3'));
     await responseHelper.setSpeechList(speechList);
-    if(STEP>=manzai.length-1) await responseHelper.endSession();
+    if(STEP>=manzai.length-1){
+        db.set('step', 0);
+        responseHelper.endSession();
+    }
 })
 .onSessionEndedRequest(responseHelper => {})
 .handle();
