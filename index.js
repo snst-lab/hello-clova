@@ -14,15 +14,16 @@ if (process.env.REDISTOGO_URL) {
 } else {
     var db = redis.createClient();
 }
-db.on('error', err => {
-    console.log('Error: ' + err);
-});
+db.on('connect', ()=> console.log('Redis client connected.'));
+db.on('error', err => console.log('Error: ' + err));
+db.set('step', 0);
+
 
 const manzai = {
-    0:['Hello,Agent. Nice to meet you.',3],
-    1:['Oh, really? Thank you.',3],
-    2:['Hey,Agent?','Shunsuke is a sloppy person.',' When He is working on something, he is unable to care about other things.','And he is a dirty man.',5],
-    3:[1,3,3],
+    0:['Hello,Agent. Nice to meet you.',1,1,1,1,1],
+    1:['Oh, really? Thank you.',1,1,1],
+    2:['Hey,Agent?','Shunsuke is a sloppy person.',' When He is working on something, he is unable to care about other things.','And he is a dirty man.',1,1,1,1,1],
+    3:[1,1,1],
     4:['Because you said me shut up.',1],
     5:['Good-bye Agent.'],
 };
@@ -44,7 +45,6 @@ const clovaSkillHandler = clova.Client.configureSkill()
     responseHelper.setSimpleSpeech(
         clova.SpeechBuilder.createSpeechText(wakeup[rand(0,wakeup.length-1)],'en')
     );
-    db.set('step', 0);
     db.get('name', (err, reply)=>{
         NAME = reply;
     });
