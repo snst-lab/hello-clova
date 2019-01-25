@@ -37,7 +37,7 @@ const clovaSkillHandler = clova.Client.configureSkill()
     );
     db.set('step', 0);
     db.get('name', (err, reply)=>{
-        NAME = reply;
+        NAME = reply||'';
     });
 })
 .onIntentRequest(async responseHelper => {
