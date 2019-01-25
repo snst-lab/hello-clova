@@ -36,6 +36,7 @@ const clovaSkillHandler = clova.Client.configureSkill()
     responseHelper.setSimpleSpeech(
         clova.SpeechBuilder.createSpeechText(wakeup[rand(0,wakeup.length-1)],'en')
     );
+    db.set('step', 0);
     db.get('name', (err, reply)=>{
         NAME = reply;
     });
