@@ -4,6 +4,6 @@ const manzai = {
     2:['Hey,AGENT?','Shunsuke is a sloppy person.',' When He is working on something, he is unable to care about other things.','And he is a dirty man.',0,0,0],
     3:[0,0,0,0,0,0,0],
     4:['Because you said me shut up.',0,0],
-    5:['Good-bye AGENT.']
+    5:['Good-bye AGENT.','See you again.']
 };
 module.exports = manzai;
