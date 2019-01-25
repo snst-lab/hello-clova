@@ -30,7 +30,7 @@ const manzai = {
 /**
  * Configure ClovaSkill
  */
-var STEP=0;
+var STEP;
 const rand = (min, max) => ~~(Math.random() * (max - min + 1) + min);
 
 const clovaSkillHandler = clova.Client.configureSkill()
@@ -43,7 +43,7 @@ const clovaSkillHandler = clova.Client.configureSkill()
     responseHelper.setSimpleSpeech(
         clova.SpeechBuilder.createSpeechText(wakeup[rand(0,wakeup.length-1)],'en')
     );
-    // db.set('step', 0);
+    db.set('step', 0);
 })
 .onIntentRequest(async responseHelper => {
     await db.get('step', (err, reply)=>{
