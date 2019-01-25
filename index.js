@@ -30,7 +30,7 @@ const manzai = {
 /**
  * Configure ClovaSkill
  */
-var STEP;
+var STEP=0;
 const rand = (min, max) => ~~(Math.random() * (max - min + 1) + min);
 
 const clovaSkillHandler = clova.Client.configureSkill()
