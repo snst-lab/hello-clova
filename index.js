@@ -21,7 +21,7 @@ db.on('error', err => {
 const manzai = {
     0:['Hello,Agent. Nice to meet you.',1],
     1:['Oh, really? Thank you.',1],
-    2:['Hey,Agent?','Shunsuke is a sloppy person.',' When He is working on something, he is unable to care about other things.','And he is a dirty man.',1,1],
+    2:['Hey,Agent?','Shunsuke is a sloppy person.',' When He is working on something, he is unable to care about other things.','And he is a dirty man.',1,1,1,1],
     3:[1,1,1],
     4:['Because you said me shut up.',1],
     5:['Good-bye Agent.',1],
@@ -31,6 +31,7 @@ const manzai = {
  * Configure ClovaSkill
  */
 var STEP;
+var NAME;
 const rand = (min, max) => ~~(Math.random() * (max - min + 1) + min);
 
 const clovaSkillHandler = clova.Client.configureSkill()
@@ -44,16 +45,17 @@ const clovaSkillHandler = clova.Client.configureSkill()
         clova.SpeechBuilder.createSpeechText(wakeup[rand(0,wakeup.length-1)],'en')
     );
     db.set('step', 0);
+    await db.set('name', (err, reply)=>{
+        NAME = reply;
+    });
 })
 .onIntentRequest(async responseHelper => {
     await db.get('step', (err, reply)=>{
         STEP = reply|0;
     });
-    await db.set('step', 1+STEP|0);
-    // STEP = await responseHelper.getSessionAttributes.step|0;
-    const SpeechList = await manzai[STEP].map(e=> e===1 ? clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/1sec.mp3') : clova.SpeechBuilder.createSpeechText(e,'en'));
+    await db.set('step', 1+STEP);
+    const SpeechList = await manzai[STEP].map(e=> [1,3,5].includes(e) ? clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/'+e+'sec.mp3') : clova.SpeechBuilder.createSpeechText(e.replace(/Agent/g,NAME),'en'));
     await responseHelper.setSpeechList(SpeechList);
-    // await responseHelper.setSessionAttributes({'step' : 1+STEP});
 })
 .onSessionEndedRequest(responseHelper => {})
 .handle();
@@ -72,7 +74,7 @@ const linebotHandler = (event) => {
   if (event.type !== 'message' || event.message.type !== 'text') {
     return Promise.resolve(null);
   }
-  return db.set('message', event.message.text, (err, reply)=>{
+  return db.set('name', event.message.text, (err, reply)=>{
        bot.replyMessage(event.replyToken, {
          type: 'text',
          text: reply
