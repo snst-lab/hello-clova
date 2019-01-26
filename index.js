@@ -23,6 +23,7 @@ db.on('error', err => console.log('Error: ' + err));
  * Configure ClovaSkill
  */
 var SEQUENCE, NAME;
+const L = Object.keys(manzai).length;
 const rand = (min, max) => ~~(Math.random() * (max - min + 1) + min);
 
 const clovaSkillHandler = clova.Client.configureSkill()
@@ -40,7 +41,6 @@ const clovaSkillHandler = clova.Client.configureSkill()
     });
 })
 .onIntentRequest(async responseHelper => {
-    const L = Object.keys(manzai).length;
     await db.get('sequence', (err, reply)=>{
         SEQUENCE = reply|0;
         db.set('sequence', 1+SEQUENCE);
