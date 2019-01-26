@@ -22,7 +22,7 @@ db.on('error', err => console.log('Error: ' + err));
 /**
  * Configure ClovaSkill
  */
-var STEP, NAME;
+var SEQUENCE, NAME;
 const rand = (min, max) => ~~(Math.random() * (max - min + 1) + min);
 
 const clovaSkillHandler = clova.Client.configureSkill()
@@ -34,24 +34,25 @@ const clovaSkillHandler = clova.Client.configureSkill()
     responseHelper.setSimpleSpeech(
         clova.SpeechBuilder.createSpeechText(wakeup[rand(0,wakeup.length-1)],'en')
     );
-    db.set('step', 0);
+    db.set('sequence', 0);
     db.get('name', (err, reply)=>{
         NAME = reply||'';
     });
 })
 .onIntentRequest(async responseHelper => {
-    await db.get('step', (err, reply)=>{
-        STEP = reply|0;
-        db.set('step', 1+STEP);
+    const L = Object.keys(manzai).length;
+    await db.get('sequence', (err, reply)=>{
+        SEQUENCE = reply|0;
+        db.set('sequence', 1+SEQUENCE);
     });
-    const speechList = await manzai[STEP].map(e=> e ? clova.SpeechBuilder.createSpeechText(e.replace(/AGENT/g,NAME||''),'en') : clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/1sec.mp3'));
+    const speechList = await manzai[SEQUENCE%L].map(e=> e ? clova.SpeechBuilder.createSpeechText(e.replace(/AUDIENCE/g,NAME||''),'en') : clova.SpeechBuilder.createSpeechUrl('https://raw.githubusercontent.com/snst-lab/hello-clova/master/assets/audio/1sec.mp3'));
     await responseHelper.setSpeechList(speechList);
-    if(STEP>=manzai.length-1){
+    if(SEQUENCE===L-1){
         responseHelper.endSession();
     }
 })
 .onSessionEndedRequest(responseHelper => {
-    db.set('step', 0);
+    db.set('sequence', 0);
 })
 .handle();
 
